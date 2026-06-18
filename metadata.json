@@ -1,0 +1,6 @@
+{
+  "name": "ManagerApp",
+  "description": "Desarrollo de software, mantenimiento de computadores, redes empresariales, cableado estructurado, CCTV y soporte tecnologico en Bogota y Colombia.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

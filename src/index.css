@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Space Grotesk", monospace;
+  --color-brand-dark: #0f2745;
+  --color-brand-mid: #183a63;
+  --color-brand-accent: #00b67a;
+}
+
+html, body {
+  scroll-behavior: smooth;
+  background-color: #f8fafc;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.service-card {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid rgba(15, 39, 69, 0.08);
+}
+
+.service-card:hover {
+  border-color: #00b67a;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px -10px rgba(15, 39, 69, 0.15);
+}
+
+/* Hide scrollbars for slick look on carousel lists */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
