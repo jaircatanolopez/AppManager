@@ -111,6 +111,27 @@ app.get(["/Nuestros clientes.png", "/Nuestros%20clientes.png", "/Nuestros client
   res.status(404).send("Nuestros clientes image file not found");
 });
 
+// Chatbot local rules-based simulation fallback helper
+function getLocalFallbackReply(userMessage: string): string {
+  const cleanMsg = userMessage.toLowerCase();
+  
+  if (cleanMsg.includes("cotizacion") || cleanMsg.includes("cotizar") || cleanMsg.includes("precio")) {
+    return "Con gusto le ayudamos con una cotización para su proyecto. En Manager APP realizamos un diagnóstico inicial sin costo para evaluar sus necesidades y estructurar un presupuesto adecuado. Puede escribirnos directamente a nuestro WhatsApp oficial (+57 300 393 9349 o +57 321 429 5956) o enviarnos un correo a appmanagercolombia@outlook.com. ¿De qué área tecnológica es su requerimiento?";
+  } else if (cleanMsg.includes("software") || cleanMsg.includes("web") || cleanMsg.includes("desarrollo")) {
+    return "En Manager APP ofrecemos servicios avanzados de **desarrollo de software Colombia** y **desarrollo web bogotá**. Creamos aplicaciones web personalizadas, dashboards integrados con **análisis de datos power bi** y soluciones de **automatización empresarial** para optimizar la eficiencia de sus operaciones. Cuéntenos, ¿desea desarrollar un software a la medida o requiere asesoría en su arquitectura actual?";
+  } else if (cleanMsg.includes("soporte") || cleanMsg.includes("mantenimiento") || cleanMsg.includes("computador") || cleanMsg.includes("pc")) {
+    return "Nuestro servicio de **soporte técnico empresarial** y **mantenimiento de computadores** está diseñado para mantener sus estaciones de trabajo, servidores y redes estables. Realizamos limpiezas físicas, optimización de software, licenciamiento y atención rápida presencial en Bogotá y remota para todo el país. ¿Sus equipos se encuentran lentos o tiene alguna falla específica?";
+  } else if (cleanMsg.includes("red") || cleanMsg.includes("cableado") || cleanMsg.includes("switch") || cleanMsg.includes("wifi")) {
+    return "Brindamos estructuración profesional en **redes empresariales** y **cableado estructurado**. Organizamos racks de servidores, switches, puntos de acceso WiFi y optimizamos su canal de internet. Garantizamos canales estables y sin interferencias en Bogotá. ¿Requiere un nuevo montaje o el mantenimiento de una red existente?";
+  } else if (cleanMsg.includes("camara") || cleanMsg.includes("cctv") || cleanMsg.includes("seguridad") || cleanMsg.includes("dvr")) {
+    return "Ofrecemos **instalación de cámaras de seguridad** y sistemas de **CCTV** de alta definición en Bogotá. Integramos cámaras IP y analógicas, NVR/DVR, alertas automatizadas en celular y monitoreo confiable para locales, oficinas, bodegas o su hogar. ¿Desea vigilancia remota o requiere cobertura para un área particular?";
+  } else if (cleanMsg.includes("marketing") || cleanMsg.includes("seo") || cleanMsg.includes("google")) {
+    return "Impulsamos su marca con **marketing digital colombia**. Nos especializamos en SEO local para posicionar su empresa en Bogotá, campañas de Google Ads y generación de prospectos. ¿Le gustaría aumentar el flujo de clientes que buscan sus servicios en internet?";
+  } else {
+    return "Hola, soy el Asistente Virtual Inteligente de Manager APP. Estoy aquí para asesorarle en soluciones de desarrollo de software, redes empresariales, CCTV, soporte técnico empresarial y mantenimiento de computadores en Bogotá y toda Colombia.\n\n¿En cuál de nuestras áreas tecnológicas de especialidad le gustaría recibir información detallada o cotización?";
+  }
+}
+
 // Chatbot API Endpoint using Gemini API
 app.post("/api/chat", async (req, res) => {
   const { messages } = req.body;
@@ -149,24 +170,7 @@ Reglas de Comportamiento:
   // Fallback simulator if Gemini API key is missing
   if (!process.env.GEMINI_API_KEY) {
     console.log("No GEMINI_API_KEY found. Using static expert rules engine fallback.");
-    let reply = "";
-    const cleanMsg = userMessage.toLowerCase();
-    
-    if (cleanMsg.includes("cotizacion") || cleanMsg.includes("cotizar") || cleanMsg.includes("precio")) {
-      reply = "Con gusto le ayudamos con una cotización para su proyecto. En Manager APP realizamos un diagnóstico inicial sin costo para evaluar sus necesidades y estructurar un presupuesto adecuado. Puede escribirnos directamente a nuestro WhatsApp oficial (+57 300 393 9349 o +57 321 429 5956) o enviarnos un correo a appmanagercolombia@outlook.com. ¿De qué área tecnológica es su requerimiento?";
-    } else if (cleanMsg.includes("software") || cleanMsg.includes("web") || cleanMsg.includes("desarrollo")) {
-      reply = "En Manager APP ofrecemos servicios avanzados de **desarrollo de software Colombia** y **desarrollo web bogotá**. Creamos aplicaciones web personalizadas, dashboards integrados con **análisis de datos power bi** y soluciones de **automatización empresarial** para optimizar la eficiencia de sus operaciones. Cuéntenos, ¿desea desarrollar un software a la medida o requiere asesoría en su arquitectura actual?";
-    } else if (cleanMsg.includes("soporte") || cleanMsg.includes("mantenimiento") || cleanMsg.includes("computador") || cleanMsg.includes("pc")) {
-      reply = "Nuestro servicio de **soporte técnico empresarial** y **mantenimiento de computadores** está diseñado para mantener sus estaciones de trabajo, servidores y redes estables. Realizamos limpiezas físicas, optimización de software, licenciamiento y atención rápida presencial en Bogotá y remota para todo el país. ¿Sus equipos se encuentran lentos o tiene alguna falla específica?";
-    } else if (cleanMsg.includes("red") || cleanMsg.includes("cableado") || cleanMsg.includes("switch") || cleanMsg.includes("wifi")) {
-      reply = "Brindamos estructuración profesional en **redes empresariales** y **cableado estructurado**. Organizamos racks de servidores, switches, puntos de acceso WiFi y optimizamos su canal de internet. Garantizamos canales estables y sin interferencias en Bogotá. ¿Requiere un nuevo montaje o el mantenimiento de una red existente?";
-    } else if (cleanMsg.includes("camara") || cleanMsg.includes("cctv") || cleanMsg.includes("seguridad") || cleanMsg.includes("dvr")) {
-      reply = "Ofrecemos **instalación de cámaras de seguridad** y sistemas de **CCTV** de alta definición en Bogotá. Integramos cámaras IP y analógicas, NVR/DVR, alertas automatizadas en celular y monitoreo confiable para locales, oficinas, bodegas o su hogar. ¿Desea vigilancia remota o requiere cobertura para un área particular?";
-    } else if (cleanMsg.includes("marketing") || cleanMsg.includes("seo") || cleanMsg.includes("google")) {
-      reply = "Impulsamos su marca con **marketing digital colombia**. Nos especializamos en SEO local para posicionar su empresa en Bogotá, campañas de Google Ads y generación de prospectos. ¿Le gustaría aumentar el flujo de clientes que buscan sus servicios en internet?";
-    } else {
-      reply = "Hola, soy el Asistente Virtual Inteligente de Manager APP. Estoy aquí para asesorarle en soluciones de desarrollo de software, redes empresariales, CCTV, soporte técnico empresarial y mantenimiento de computadores en Bogotá y toda Colombia.\n\n¿En cuál de nuestras áreas tecnológicas de especialidad le gustaría recibir información detallada o cotización?";
-    }
+    const reply = getLocalFallbackReply(userMessage);
     return res.json({ text: reply });
   }
 
@@ -178,23 +182,49 @@ Reglas de Comportamiento:
       parts: [{ text: m.text }],
     }));
 
-    const response = await ai.models.generateContent({
-      model: "gemini-3.5-flash",
-      contents: [
-        ...contextHistory,
-        { role: "user", parts: [{ text: userMessage }] }
-      ],
-      config: {
-        systemInstruction: systemInstruction,
-        temperature: 0.7,
-      },
-    });
+    let response: any = null;
+    let attempts = 0;
+    const maxAttempts = 2;
+    let lastError: any = null;
 
-    const replyText = response.text || "Disculpe, no he podido procesar la respuesta en este momento. Por favor contáctenos a appmanagercolombia@outlook.com.";
+    while (attempts < maxAttempts) {
+      try {
+        response = await ai.models.generateContent({
+          model: "gemini-3.5-flash",
+          contents: [
+            ...contextHistory,
+            { role: "user", parts: [{ text: userMessage }] }
+          ],
+          config: {
+            systemInstruction: systemInstruction,
+            temperature: 0.7,
+          },
+        });
+        lastError = null;
+        break; // Success!
+      } catch (err: any) {
+        lastError = err;
+        attempts++;
+        console.warn(`⚠️ Warning: Gemini API attempt ${attempts} failed (${err.message || err}). Retrying if permitted...`);
+        if (attempts < maxAttempts) {
+          // Wait 600ms before retrying
+          await new Promise((resolve) => setTimeout(resolve, 600));
+        }
+      }
+    }
+
+    if (lastError) {
+      console.error("❌ Gemini API is temporarily offline or experiencing high demand (503). Recovering gracefully with local rules simulator.");
+      const fallbackReply = getLocalFallbackReply(userMessage);
+      return res.json({ text: fallbackReply, isFallback: true });
+    }
+
+    const replyText = response?.text || "Disculpe, no he podido procesar la respuesta en este momento. Por favor contáctenos a appmanagercolombia@outlook.com.";
     return res.json({ text: replyText });
   } catch (err: any) {
-    console.error("Gemini API Error:", err);
-    return res.status(500).json({ error: `Error conectando con la API de IA: ${err.message}` });
+    console.error("Gemini API general catch-all error:", err);
+    const fallbackReply = getLocalFallbackReply(userMessage);
+    return res.json({ text: fallbackReply, isFallback: true });
   }
 });
 
